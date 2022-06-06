@@ -48,8 +48,16 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
+#production:
+#  <<: *default
+#  database: tasklist_production
+#  username: tasklist
+#  password: <%= ENV['TASKLIST_DATABASE_PASSWORD'] %>
+
 production:
-  <<: *default
-  database: tasklist_production
-  username: tasklist
-  password: <%= ENV['TASKLIST_DATABASE_PASSWORD'] %>
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  database: message_board_production
+  username: message_board
+  password: <%= ENV['MESSAGE_BOARD_DATABASE_PASSWORD'] %>
