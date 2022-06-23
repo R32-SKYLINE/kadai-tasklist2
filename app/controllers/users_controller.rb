@@ -6,7 +6,10 @@ class UsersController < ApplicationController
   end
 
   def show
+    #binding.pry
     @user = User.find(params[:id])
+    @pagy, @tasks = pagy(@user.tasks.order(id: :desc))
+    counts(@user)
   end
 
   def new
