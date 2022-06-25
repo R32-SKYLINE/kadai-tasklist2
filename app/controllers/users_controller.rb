@@ -10,6 +10,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     @pagy, @tasks = pagy(@user.tasks.order(id: :desc))
     counts(@user)
+    redirect_to root_url
   end
 
   def new

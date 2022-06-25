@@ -11,7 +11,11 @@ class TasksController < ApplicationController
   end
   
    def show
-      set_task
+      if current_user.id == @task.user_id
+         set_task
+      else
+         redirect_to root_url
+      end
    end
 
    def new
@@ -26,7 +30,7 @@ class TasksController < ApplicationController
       else
          @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
          flash.now[:danger] = 'メッセージの投稿に失敗しました。'
-         render 'toppages/index'
+         render 'tasks/index'
       end
    end
   
@@ -56,7 +60,8 @@ class TasksController < ApplicationController
    private
    
    def set_task
-      @task = Task.find(params[:id])
+      #binding.pry
+      @task = Task.find_by(params[:id])
    end
 
    # Strong Parameter
