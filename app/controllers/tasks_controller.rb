@@ -6,16 +6,13 @@ class TasksController < ApplicationController
   def index
     if logged_in?
       @task = current_user.tasks.build  # form_with 用
-      @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
+      @pagy, @tasks = pagy(current_user.tasks.order(id: :desc), items: 7)
     end
   end
   
    def show
-      if current_user.id == @task.user_id
-         set_task
-      else
-         redirect_to root_url
-      end
+     @task = current_user.tasks.build  # form_with 用
+     set_task
    end
 
    def new
@@ -25,11 +22,11 @@ class TasksController < ApplicationController
    def create
       @task = current_user.tasks.build(message_params)
       if @task.save
-         flash[:success] = 'メッセージを投稿しました。'
+         flash[:success] = 'タスクを登録しました。'
          redirect_to root_url
       else
          @pagy, @tasks = pagy(current_user.tasks.order(id: :desc))
-         flash.now[:danger] = 'メッセージの投稿に失敗しました。'
+         flash.now[:danger] = 'タスクの登録に失敗しました。'
          render 'tasks/index'
       end
    end
@@ -50,7 +47,7 @@ class TasksController < ApplicationController
    end
 
    def destroy
-      @task = Task.find(params[:id])
+      set_task
       @task.destroy
       
       flash[:success] = 'タスクは正常に削除されました。'
@@ -61,7 +58,7 @@ class TasksController < ApplicationController
    
    def set_task
       #binding.pry
-      @task = Task.find_by(params[:id])
+      @task = Task.find(params[:id])
    end
 
    # Strong Parameter
