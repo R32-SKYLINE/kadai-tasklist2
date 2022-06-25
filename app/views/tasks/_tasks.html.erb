@@ -10,14 +10,19 @@
         <img class="rounded me-2 mb-5" src="<%= gravatar_url(task.user, { size: 64 }) %>" alt="">
         <div>
           <div>
-            <%= link_to task.user.name, user_path(task.user), class: "text-decoration-none" %> <span class="text-muted">posted at <%= task.created_at %></span>
+            <% if current_user.name == task.user.name %>
+              <%= link_to task.user.name, task_path(task.id), class: "text-decoration-none" %> <span class="text-muted">posted at <%= task.created_at %></span>
+            <% else %>
+              <%= task.user.name %> <span class="text-muted">posted at <%= task.created_at %></span>
+            <% end %>
           </div>
           <div>
             <p><%= task.content %> : <%= task.status %></p>
           </div>
           <div>
             <% if current_user == task.user %>
-              <%= link_to "Delete", task, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-sm' %>
+              <%= link_to 'タスク詳細', task_path(task.id), class: 'btn btn-primary btn-sm' %>
+              <%= link_to "削除", task, method: :delete, data: { confirm: "You sure?" }, class: 'btn btn-danger btn-sm' %>
             <% end %>
           </div>
         </div>
